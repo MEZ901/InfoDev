@@ -7,7 +7,7 @@
     "start": "node .",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwindcss\" \"npm run dev:ejs\"",
     "dev:server": "nodemon .",
-    "dev:tailwindcss": "npx tailwindcss -i ./public/css/main.css -o ./public/css/output.css --watch",
+    "dev:tailwindcss": "npx tailwindcss -i ./public/stylesheet/main.css -o ./public/stylesheet/output.css --watch",
     "dev:ejs": "browser-sync start --proxy 'localhost:3000' --files './src/views/**/*.ejs'"
   },
   "keywords": [],
