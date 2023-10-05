@@ -1,14 +1,16 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-const routes = require("./routes");
+const routes = require("./src/routes");
 
 dotenv.config();
 
 const app = express();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "src/views"));
+
+app.use(express.static(path.join(__dirname, "public")));
 
 routes.register(app);
 
