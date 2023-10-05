@@ -43,6 +43,16 @@ To run the application locally, you can use the following command:
 ```bash
 npm run dev
 ```
+## Running the migration
+to run migration from Prisma use the following command line:
+``
+prisma migrate dev
+``
+after running the command Prisma will ask you to name the folder where your migration will be stored, better name it like your project.
+if you make a modification in your Prisma code and you want to update use the following command line
+``
+prisma db push
+``
 
 > **PS:** You have two options to access the application:
 >   1. **Browser-Sync Version (Auto-Refresh):**
