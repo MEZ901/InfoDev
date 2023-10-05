@@ -35,6 +35,24 @@ You may need to configure some environment variables.
    cp .env.example .env
    ```
 2. Update on the environment variables.
+   
+## Database Setup
+
+> Make sure you have created and set up your database configuration in the `.env` file before proceeding with these steps.
+
+1. Run database migrations:
+
+    ```bash
+    npm run db:migrate
+    ```
+2. Generate the Prisma Client code:
+   ```bash
+    npm run prisma:generate
+    ```
+3. Seed the database with initial data (optional):
+    ```bash
+    npm run db:seed
+    ```
 
 ## Running the Application
 
@@ -51,17 +69,6 @@ npm run dev
 >   2. **Normal Version (Manual Refresh):**
 >       - The normal version of the application can be accessed at `http://localhost:3000`.
 >       - In this version, changes to your EJS templates may require manual page refreshing in your web browser.
-
+>
 > Feel free to choose the version that best suits your development needs.
-
-## Running the migration
-to run migration from Prisma use the following command line:
-```bash
-prisma migrate dev
-```
-after running the command Prisma will ask you to name the folder where your migration will be stored, better name it like your project.
-if you make a modification in your Prisma code and you want to update use the following command line
-```bash
-prisma db push
-```
 
