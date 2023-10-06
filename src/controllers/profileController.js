@@ -1,7 +1,7 @@
-class profileController{
-  static profile = (req,res,next)=>{
+class ProfileController{
+  static profile = (req,res,)=>{
       res.render("profile",{title:"youssef"})
   }
 }
 
-module.exports=profileController;
+module.exports=ProfileController;
