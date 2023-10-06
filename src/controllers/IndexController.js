@@ -1,5 +1,5 @@
 class IndexController {
-  static index = (req, res, next) => {
+  static index = (req, res) => {
     res.render("index", { title: "InfoDev" });
   };
 }

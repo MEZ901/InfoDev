@@ -9,23 +9,35 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-model Users {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
-  password String
-  photo String
-  created_at DateTime @default(now())
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  bio        String?
+  photo      String
+  created_at DateTime  @default(now())
+  articles   Article[]
+  isDeleted  Boolean   @default(false)
 }
 
-model Articls{
-  id Int @id @default(autoincrement())
-  title String
-  contenu String
-  DateOfCreate DateTime @default(now())
+model Article {
+  id         Int       @id @default(autoincrement())
+  title      String
+  contenu    String
+  created_at DateTime  @default(now())
+  author     User?     @relation(fields: [authorId], references: [id])
+  authorId   Int?
+  comment    Comment[]
+  isDeleted  Boolean   @default(false)
 }
-model Commentaires{
-  id Int @id @default(autoincrement())
-  contant String
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  contant    String
   created_at DateTime @default(now())
+  Article    Article? @relation(fields: [articleId], references: [id])
+  articleId  Int?
+  isDeleted  Boolean  @default(false)
 }
