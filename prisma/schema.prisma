@@ -13,6 +13,17 @@ datasource db {
 model User {
   id         Int       @id @default(autoincrement())
   name       String
+  bio        String?
+  email      String    @unique
+  password   String
+  photo      String
+  created_at DateTime  @default(now())
+  articles   Article[]
+  isDeleted  Boolean   @default(false)
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
   email      String    @unique
   password   String
   bio        String?
@@ -27,8 +38,8 @@ model Article {
   title      String
   contenu    String
   created_at DateTime  @default(now())
-  author     User?     @relation(fields: [authorId], references: [id])
-  authorId   Int?
+  author     User      @relation(fields: [authorId], references: [id])
+  authorId   Int
   comment    Comment[]
   isDeleted  Boolean   @default(false)
 }
@@ -37,7 +48,7 @@ model Comment {
   id         Int      @id @default(autoincrement())
   contant    String
   created_at DateTime @default(now())
-  Article    Article? @relation(fields: [articleId], references: [id])
-  articleId  Int?
+  Article    Article  @relation(fields: [articleId], references: [id])
+  articleId  Int
   isDeleted  Boolean  @default(false)
 }
