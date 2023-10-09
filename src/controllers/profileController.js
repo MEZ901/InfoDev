@@ -14,7 +14,7 @@ class ProfileController{
       // Pass the fetched data to the view
       res.render('profile', { users ,articles});
       console.log(users)
-      console.log(articles)
+      console.log(Object.keys(articles),"hello")
     } catch (error) {
       console.error('Error:', error);
       res.status(500).send(`Error:${error.message}`);
