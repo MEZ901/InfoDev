@@ -3,11 +3,14 @@ const dotenv = require("dotenv");
 const path = require("path");
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
+const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articlesRoute");
 
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
