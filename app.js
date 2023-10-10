@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
+const articlesRouter = require("./src/routes/articlesRoute");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.static(path.join(__dirname, "public")));
 routes.register(app);
 
 app.use("/auth", authRouter);
+app.use("/articles", articlesRouter);
 
 const PORT = process.env.SERVER_PORT || 3000;
 

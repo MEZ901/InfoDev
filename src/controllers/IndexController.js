@@ -1,6 +1,6 @@
 class IndexController {
   static index = (req, res) => {
-    res.render("index", { title: "InfoDevYep" });
+    res.render("index", { title: "articles" });
   };
 }
 
