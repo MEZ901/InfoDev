@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
-const bodyParser = require('body-parser'); // CSRF Body parsing
+const bodyParser = require("body-parser");
 
 dotenv.config();
 
