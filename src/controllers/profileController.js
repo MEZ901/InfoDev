@@ -54,12 +54,19 @@ class ProfileController{
           }
   }
   static async delete(req,res){
+    try{
             const  id =req.query.id;
-            const deleteUser= prisma.user.update({where:{id:id},data:{
-              isDeleted:1
+            const idUser=parseInt(id);
+            const deleteUser=await prisma.user.update({where:{id:idUser},data:{
+              isDeleted : true
             }})
            res.redirect('/auth/register');
+          }catch (error) {
+            console.error('Error:', error);
+            res.status(500).send('Internal Server Error');
+          }
+        }
   }
-}
+
 
 module.exports=ProfileController;
