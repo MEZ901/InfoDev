@@ -4,25 +4,25 @@ const path = require("path");
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
 const profileRoute= require("./src/routes/profile");
- const bodyParser = require('body-parser'); 
-const multer = require("multer");
+const bodyParser = require("body-parser");
+const articlesRouter = require("./src/routes/articlesRoute");
 
- 
- dotenv.config();
- 
- const app = express();
- app.use(bodyParser.urlencoded({ extended: true }));
-//  app.use(multer().none())
- 
- app.set("view engine", "ejs");
- app.set("views", path.join(__dirname, "src/views"));
+dotenv.config();
+
+const app = express();
+
+app.use(bodyParser());
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "src/views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
 routes.register(app);
 profileRoute.profile(app);
 app.use("/auth", authRouter);
-// profileRoute.profilePost(app);
+app.use("/articles", articlesRouter);
+
 const PORT = process.env.SERVER_PORT || 3000;
 
 app.listen(PORT, () => {
