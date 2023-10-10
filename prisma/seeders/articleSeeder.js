@@ -13,7 +13,7 @@ async function articleSeeder(amount = 10) {
       await prisma.article.create({
         data: {
           title: faker.lorem.words(3),
-          content: faker.lorem.paragraph(),
+          content: faker.lorem.paragraph({ min: 5, max: 10 }),
           authorId: randomUser.id,
         },
       });
