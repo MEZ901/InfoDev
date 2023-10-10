@@ -11,14 +11,14 @@ class ProfileController{
       const userId=req.query.id
       const userIdInt = parseInt(userId);
       
-      const users = await prisma.user.findUnique({ where: { id: userIdInt } });
+      const users = await prisma.user.findUnique({ where: { id: userIdInt,isDeleted: false } });
       const articles= await prisma.article.findMany({where: { authorId: userIdInt  }});
       res.render('profile', { users ,articles});
       // console.log(users)
       // console.log(Object.keys(articles),"hello")
     } catch (error) {
       console.error('Error:', error);
-      res.status(500).send(`Error:${error.message}`);
+      res.send(`Error:${error.message}`);
     } 
    
   }
@@ -50,7 +50,7 @@ class ProfileController{
               res.redirect('/profile?id=' + id);
           }catch(error){
           console.error("Error:",error)
-          res.status(500).send(`Error:${error.message}`);
+          res.send(`Error:${error.message}`);
           }
   }
   static async delete(req,res){
@@ -63,10 +63,8 @@ class ProfileController{
            res.redirect('/auth/register');
           }catch (error) {
             console.error('Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.send(' Error');
           }
         }
   }
-
-
 module.exports=ProfileController;
