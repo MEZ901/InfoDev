@@ -1,4 +1,4 @@
-const profileController = require("../controllers/ProfileController")
+const profileController = require("../controllers/profileController")
 
 const profile= (app)=>{
   app.get("/profile",profileController.profile);

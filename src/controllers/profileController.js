@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { getImageBase64 } = require("../helpers/functions");
+const { getImageBase64, hashPassword } = require("../helpers/functions");
 // const getImageBase64= require()
 
 const prisma= new PrismaClient;
@@ -25,20 +25,40 @@ class ProfileController{
   static async updateProfile(req,res){
     try{
       
-      const  {id,name,bio,image}=  req.body
+      const  {id,name,bio,email,password,image}=  req.body
           // getImageBase64(image);
-      console.log(id,name,bio,image);
+      console.log(id,name,bio,email,password,image);
             const idUserUpdate= parseInt(id);
-             const updateUser=await prisma.user.update({where:{id:idUserUpdate},data:{
-              name:name,
-              bio:bio
-             }})
-           const y=   btoa(image);
-              res.redirect('/profile?id=' + 3);
+            const data = {};
+            if(name!=""){
+                  data.name=name;
+            } if(bio!=""){
+                data.bio=bio;
+            } if(image!=""){
+                 data.photo=image;
+            } if(password!=""){
+                 const pass= await hashPassword(password);
+                  data.password=pass;
+            } if(email!=""){
+                 data.email=email;
+            }
+
+            console.log(data,"hello");
+             const updateUser=await prisma.user.update({where:{id:idUserUpdate},
+            data:data})
+          //  const y=   btoa(image);
+              res.redirect('/profile?id=' + id);
           }catch(error){
           console.error("Error:",error)
           res.status(500).send(`Error:${error.message}`);
           }
+  }
+  static async delete(req,res){
+            const  id =req.query.id;
+            const deleteUser= prisma.user.update({where:{id:id},data:{
+              isDeleted:1
+            }})
+           res.redirect('/auth/register');
   }
 }
 
