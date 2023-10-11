@@ -14,7 +14,8 @@ class CommentController {
 
   static creatComment = async (req, res) => {
     const { text } = req.body;
-    const { article_id, user_id } = req.query;
+    const { article_id } = req.query;
+    const user_id = JSON.parse(req.cookies.userInfo).id;
 
     try {
       const newComment = await prisma.comment.create({
@@ -66,7 +67,6 @@ class CommentController {
 
   static deleteComment = async (req, res) => {
     const commentId = req.body.commentId;
-    console.log(commentId);
 
     if (!commentId || isNaN(commentId) || commentId <= 0) {
       return res.status(400).json({ error: "Invalid comment ID" });

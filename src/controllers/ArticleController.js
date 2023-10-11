@@ -57,7 +57,8 @@ class ArticleController {
   };
 
   static store = async (req, res) => {
-    const { title, content, user_id } = req.body;
+    const { title, content } = req.body;
+    const user_id = JSON.parse(req.cookies.userInfo).id;
 
     const article = await prisma.article.create({
       data: {

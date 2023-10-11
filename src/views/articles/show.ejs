@@ -24,7 +24,7 @@
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
-            onclick="window.location.href = '/profile?id=1'"
+            onclick="handleProfileClick()"
           >
             <span class="sr-only">Open user menu</span>
             <img
@@ -97,7 +97,7 @@
               <h1 class="text-center font-bold text-3xl mb-6">Comments</h1>
               <form
                 class="mb-6"
-                action="/comment/creat-comment?article_id=<%=article.id%>&user_id=1"
+                action="/comment/creat-comment?article_id=<%=article.id%>"
                 method="POST"
               >
                 <div
@@ -222,5 +222,26 @@
         </div>
       </div>
     </div>
+
+    <script>
+      const handleProfileClick = () => {
+        const userInfoCookie = document.cookie
+          .split("; ")
+          .find((cookie) => cookie.startsWith("userInfo="));
+
+        if (userInfoCookie) {
+          const userInfoValue = userInfoCookie.split("=")[1];
+          const userInfoObject = JSON.parse(decodeURIComponent(userInfoValue));
+          if (userInfoObject && userInfoObject.id) {
+            const id = userInfoObject.id;
+            window.location.href = `/profile?id=${id}`;
+          } else {
+            alert('No "id" found in the userInfo cookie.');
+          }
+        } else {
+          alert('No "userInfo" cookie found.');
+        }
+      };
+    </script>
   </body>
 </html>
