@@ -6,6 +6,12 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const path = require("path");
 
+// Middlewares
+const {
+  memberMiddleware,
+  guestMiddleware,
+} = require("./src/middlewares/authMiddleware");
+
 // Custom route modules
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
@@ -34,9 +40,9 @@ app.use(methodOverride("_method"));
 // Routes
 routes.index(app);
 profileRoute.profile(app);
-app.use("/auth", authRouter);
-app.use("/comment", commentRouter);
-app.use("/articles", articlesRouter);
+app.use("/auth", guestMiddleware, authRouter);
+app.use("/comment", memberMiddleware, commentRouter);
+app.use("/articles", memberMiddleware, articlesRouter);
 notFound.found(app);
 
 const PORT = process.env.SERVER_PORT || 3000;
