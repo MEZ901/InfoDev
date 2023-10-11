@@ -1,9 +1,7 @@
-const IndexController = require("../controllers/IndexController");
-// const profileController = require("../controllers/profileController");
-
-const register = (app) => {
-  app.get("/", IndexController.index);
- 
+const index = (app) => {
+  app.get("/", (req, res) => {
+    res.render("index", { title: "InfoDev" });
+  });
 };
 
-module.exports = { register };
+module.exports = { index };
