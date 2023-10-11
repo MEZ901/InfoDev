@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const routes = require("./src/routes");
 const authRouter = require("./src/routes/auth");
-const profileRoute= require("./src/routes/profile");
+const profileRoute = require("./src/routes/profile");
 const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articlesRoute");
 
