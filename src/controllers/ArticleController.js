@@ -84,7 +84,7 @@ class ArticleController {
 
   static update = async (req, res) => {
     const { id } = req.params;
-    const { title, body } = req.body;
+    const { title, content } = req.body;
 
     const article = await prisma.article.update({
       where: {
@@ -92,7 +92,7 @@ class ArticleController {
       },
       data: {
         title,
-        body,
+        content,
       },
     });
 
