@@ -95,7 +95,11 @@
           <section class="antialiased">
             <div class="max-w-2xl mx-auto px-4">
               <h1 class="text-center font-bold text-3xl mb-6">Comments</h1>
-              <form class="mb-6" action="comment/creat-comment" method="POST">
+              <form
+                class="mb-6"
+                action="/comment/creat-comment?article_id=<%=article.id%>&user_id=1"
+                method="POST"
+              >
                 <div
                   class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
                 >
