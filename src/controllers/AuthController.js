@@ -3,14 +3,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { hashPassword } = require("../helpers/functions");
 const bcryptjs = require("bcryptjs");
+
 const app = express();
 app.use(express.json());
 
 class AuthController {
   static register = async (req, res) => {
-    // console.log(req.body);
-    // res.send(req);
-    // return;
     const { name, password, email } = req.body;
     if (!name || !password || !email) {
       return res.status(400).send("Please fill all the inputs");
