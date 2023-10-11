@@ -1,17 +1,95 @@
+// const prisma = require('../db/prisma');
+
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+const app = express();
+
+app.use(express.json());
+
 class CommentController {
-  static index = async (req, res) => {};
+  static index = async (req, res) => { };
 
-  static show = async (req, res) => {};
+  static show = async (req, res) => { };
 
-  static add = async (req, res) => {};
+  static add = async (req, res) => { };
 
-  static store = async (req, res) => {};
+  static creatComment = async (req, res) => {
+    const { text } = req.body;
+    console.log("you", req.body);
 
-  static edit = async (req, res) => {};
+    try {
+      const newComment = await prisma.comment.create({
+        data: {
+          content: text,
+          articleId: 1,
+          userId: 1,
+        },
+      });
 
-  static update = async (req, res) => {};
+      res.status(200).json(newComment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error creating comment' });
+    }
+  };
 
-  static delete = async (req, res) => {};
+  static edit = async (req, res) => { };
+
+  static updateComment = async (req, res) => {
+    const commentId = req.body.commentId;
+    const editedComment = req.body.editedComment;
+
+    try {
+      if (!commentId || isNaN(commentId) || commentId <= 0) {
+        return res.status(400).json({ error: 'Invalid comment ID' });
+      }
+
+      if (!editedComment || editedComment.trim() === '') {
+        return res.status(400).json({ error: 'Comment cannot be empty' });
+      }
+
+      // Assuming you have the necessary Prisma setup
+      const updatedComment = await prisma.comment.update({
+        where: { id: parseInt(commentId) },
+        data: { content: editedComment },
+      });
+
+      if (!updatedComment) {
+        return res.status(404).json({ error: 'Comment not found' });
+      }
+
+      res.status(200).json(updatedComment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error editing comment' });
+    }
+  };
+
+  static deleteComment = async (req, res) => {
+    const commentId = req.body.commentId;
+    console.log(commentId);
+
+    if (!commentId || isNaN(commentId) || commentId <= 0) {
+      return res.status(400).json({ error: 'Invalid comment ID' });
+    }
+
+    try {
+      // Assuming you have the necessary Prisma setup
+      const deletedComment = await prisma.comment.delete({
+        where: { id: parseInt(commentId) },
+      });
+
+      if (!deletedComment) {
+        return res.status(404).json({ error: 'Comment not found' });
+      }
+
+      res.status(204).send(); // Successful deletion
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error deleting comment' });
+    }
+  };
 }
 
 module.exports = CommentController;

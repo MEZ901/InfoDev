@@ -1,9 +1,16 @@
-const express = require("express");
+const express = require('express');
+router = express.Router();
+const commentController = require('../controllers/CommentController');
 
-const commentRouter = express.Router();
+router.post('/creat-comment', commentController.creatComment);
 
-commentRouter.get("/", (req, res) => {
+router.post('/delete-comment', commentController.deleteComment);
+
+router.post('/edit-comment', commentController.updateComment);
+
+router.get("/", (req, res) => {
   res.render("comment", { title: "Comment Page" });
 });
 
-module.exports = commentRouter;
+module.exports = router;
+

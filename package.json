@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node .",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwindcss\" \"npm run dev:sync\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:tailwindcss\"",
     "dev:server": "nodemon .",
     "dev:tailwindcss": "npx tailwindcss -i ./public/stylesheet/main.css -o ./public/stylesheet/output.css --watch --minify",
     "dev:sync": "browser-sync start --proxy 'localhost:3000' --files './src/views/**/*.ejs' --no-open",
