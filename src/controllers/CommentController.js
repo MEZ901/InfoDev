@@ -14,18 +14,19 @@ class CommentController {
 
   static creatComment = async (req, res) => {
     const { text } = req.body;
-    console.log("you", req.body);
+    const { article_id, user_id } = req.query;
 
     try {
       const newComment = await prisma.comment.create({
         data: {
           content: text,
-          articleId: 1,
-          userId: 1,
+          articleId: Number(article_id),
+          userId: Number(user_id),
         },
       });
 
-      res.status(200).json(newComment);
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error creating comment" });
