@@ -1,5 +1,7 @@
+const { guestMiddleware } = require("../middlewares/authMiddleware");
+
 const index = (app) => {
-  app.get("/", (req, res) => {
+  app.get("/", guestMiddleware, (req, res) => {
     res.render("index", { title: "InfoDev" });
   });
 };

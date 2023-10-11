@@ -24,7 +24,7 @@
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
-            onclick="window.location.href = '/profile?id=1'"
+            onclick="handleProfileClick()"
           >
             <span class="sr-only">Open user menu</span>
             <img
@@ -44,9 +44,6 @@
         class="block w-1/2 mt-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
       >
         <form action="/articles/store" method="POST">
-          <!-- user id hidden input -->
-          <input type="hidden" name="user_id" value="1" />
-
           <!--Title input-->
           <div class="mb-6">
             <label
@@ -93,5 +90,26 @@
         </form>
       </div>
     </div>
+
+    <script>
+      const handleProfileClick = () => {
+        const userInfoCookie = document.cookie
+          .split("; ")
+          .find((cookie) => cookie.startsWith("userInfo="));
+
+        if (userInfoCookie) {
+          const userInfoValue = userInfoCookie.split("=")[1];
+          const userInfoObject = JSON.parse(decodeURIComponent(userInfoValue));
+          if (userInfoObject && userInfoObject.id) {
+            const id = userInfoObject.id;
+            window.location.href = `/profile?id=${id}`;
+          } else {
+            alert('No "id" found in the userInfo cookie.');
+          }
+        } else {
+          alert('No "userInfo" cookie found.');
+        }
+      };
+    </script>
   </body>
 </html>

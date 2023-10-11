@@ -28,7 +28,7 @@
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
-            onclick="window.location.href = '/profile?id=1'"
+            onclick="handleProfileClick()"
           >
             <span class="sr-only">Open user menu</span>
             <img
@@ -47,6 +47,7 @@
           class="bg-white w-1/2 mt-10 rounded-lg shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
         >
           <div class="flex justify-end p-1">
+            <% if (loggedUserId === users.id) { %>
             <button
               data-modal-target="authentication-modal"
               data-modal-toggle="authentication-modal"
@@ -68,6 +69,7 @@
                 />
               </svg>
             </button>
+            <% } %>
           </div>
           <div class="flex items-center justify-center pt-5 flex-col">
             <img
@@ -78,6 +80,9 @@
             <h1 class="text-gray-500 text-sm p-4 text-center">
               <%=users.bio%>
             </h1>
+            <% if (loggedUserId === users.id) { %>
+            <p class="mb-3 cursor-pointer" onclick="handleLogout()">Logout</p>
+            <% } %>
           </div>
         </div>
       </main>
@@ -269,5 +274,31 @@
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
+    <script>
+      const handleProfileClick = () => {
+        const userInfoCookie = document.cookie
+          .split("; ")
+          .find((cookie) => cookie.startsWith("userInfo="));
+
+        if (userInfoCookie) {
+          const userInfoValue = userInfoCookie.split("=")[1];
+          const userInfoObject = JSON.parse(decodeURIComponent(userInfoValue));
+          if (userInfoObject && userInfoObject.id) {
+            const id = userInfoObject.id;
+            window.location.href = `/profile?id=${id}`;
+          } else {
+            alert('No "id" found in the userInfo cookie.');
+          }
+        } else {
+          alert('No "userInfo" cookie found.');
+        }
+      };
+
+      const handleLogout = () => {
+        document.cookie = `userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        window.location.href = "/";
+      };
+    </script>
   </body>
 </html>

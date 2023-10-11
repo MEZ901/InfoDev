@@ -9,17 +9,19 @@ class ProfileController {
       const userId = req.query.id;
       const userIdInt = parseInt(userId);
 
+      const loggedUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
       const users = await prisma.user.findUnique({
         where: { id: userIdInt, isDeleted: false },
       });
-      console.log(users);
+
       if (users == null) {
         res.redirect("/notFound");
       }
       const articles = await prisma.article.findMany({
         where: { authorId: userIdInt, isDeleted: false },
       });
-      res.render("profile/profile", { users, articles });
+      res.render("profile/profile", { users, articles, loggedUserId });
     } catch (error) {
       console.error("Error:", error);
       res.send(`Error:${error.message}`);
@@ -28,7 +30,7 @@ class ProfileController {
   static async updateProfile(req, res) {
     try {
       const { id, name, bio, email, password, image } = req.body;
-      console.log(id, name, bio, email, password, image);
+
       const idUserUpdate = parseInt(id);
       const data = {};
       if (name != "") {
@@ -48,7 +50,6 @@ class ProfileController {
         data.email = email;
       }
 
-      console.log(data, "hello");
       const updateUser = await prisma.user.update({
         where: { id: idUserUpdate },
         data: data,
