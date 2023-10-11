@@ -30,6 +30,7 @@ class ArticleController {
       include: {
         author: {
           select: {
+            id: true,
             photo: true,
             name: true,
             bio: true,
@@ -51,15 +52,67 @@ class ArticleController {
     res.render("articles/show", { title: "article", article });
   };
 
-  static add = async (req, res) => {};
+  static add = async (req, res) => {
+    res.render("articles/add", { title: "add article" });
+  };
 
-  static store = async (req, res) => {};
+  static store = async (req, res) => {
+    const { title, content, user_id } = req.body;
 
-  static edit = async (req, res) => {};
+    const article = await prisma.article.create({
+      data: {
+        title,
+        content,
+        authorId: Number(user_id),
+      },
+    });
 
-  static update = async (req, res) => {};
+    res.redirect("/articles");
+  };
 
-  static delete = async (req, res) => {};
+  static edit = async (req, res) => {
+    const { id } = req.params;
+
+    const article = await prisma.article.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    res.render("articles/edit", { title: "edit article", article });
+  };
+
+  static update = async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const article = await prisma.article.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+
+    res.redirect(`/articles/${id}`);
+  };
+
+  static delete = async (req, res) => {
+    const { id } = req.params;
+
+    const article = await prisma.article.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    res.redirect("/articles");
+  };
 }
 
 module.exports = ArticleController;

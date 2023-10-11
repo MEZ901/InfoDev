@@ -37,107 +37,64 @@
       </div>
     </nav>
 
-    <div class="bg-gray-200 w-full px-16 py-8 min-h-screen">
-      <div class="flex justify-evenly">
-        <form class="w-[75%]">
-          <label
-            for="default-search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only"
-            >Search</label
-          >
-          <div class="relative">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-            >
-              <svg
-                class="w-4 h-4 text-gray-500"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                />
-              </svg>
-            </div>
-            <input
-              type="search"
-              id="default-search"
-              class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search By Title, Author ..."
-              required
-            />
-            <button
-              type="submit"
-              class="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] font-medium rounded-lg text-sm px-4 py-2"
-            >
-              Search
-            </button>
-          </div>
-        </form>
-        <button
-          type="button"
-          class="flex justify-center items-center gap-3 rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-          onclick="window.location.href = '/articles/new'"
-        >
-          <svg
-            style="color: white"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="bi bi-plus"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-              fill="white"
-            ></path>
-          </svg>
-          Add article
-        </button>
-      </div>
-
+    <div
+      class="bg-gray-200 w-full px-16 py-8 min-h-screen flex flex-col items-center"
+    >
+      <h1 class="text-3xl text-center font-bold">Update Article</h1>
       <div
-        class="w-full px-16 py-8 min-h-screen flex items-center justify-center gap-3 flex-wrap"
+        class="block w-1/2 mt-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
       >
-        <% articles.map((article) => { %>
-        <div
-          class="block w-full md:w-[45%] rounded-lg bg-white text-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
-        >
-          <div class="border-b-2 border-neutral-100 px-6 py-3">
-            <p class="text-center text-gray-500 text-sm">
-              By <%= article.author.name %>
-            </p>
-          </div>
-          <div class="p-6">
-            <h5 class="mb-2 text-xl font-bold leading-tight text-neutral-800">
-              <%= article.title %>
-            </h5>
-            <p class="mb-4 text-base text-neutral-600">
-              <%= article.content.substring(0, 80) + "..." %>
-            </p>
-            <button
-              type="button"
-              class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-              data-te-ripple-init
-              data-te-ripple-color="light"
-              onclick="window.location.href = '/articles/<%= article.id %>'"
+        <form action="/articles/<%= article.id %>?_method=PUT" method="POST">
+          <!-- user id hidden input -->
+          <input type="hidden" name="user_id" value="1" />
+
+          <!--Title input-->
+          <div class="mb-6">
+            <label
+              for="default-input"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Title</label
             >
-              READ MORE
-            </button>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value="<%= article.title %>"
+              placeholder="Title"
+              required
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
           </div>
-          <div class="border-t-2 border-neutral-100 px-6 py-3">
-            <%= Math.floor((new Date() - new Date(article.created_at)) / (1000 *
-            60 * 60 * 24)) %> days ago
+
+          <!--Content textarea-->
+          <div>
+            <label
+              for="message"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Content</label
+            >
+            <textarea
+              id="content"
+              name="content"
+              rows="10"
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Write your thoughts here..."
+              required
+            >
+<%= article.content %></textarea
+            >
           </div>
-        </div>
-        <% }) %>
+
+          <!--Submit button-->
+          <button
+            type="submit"
+            class="inline-block mt-5 w-full rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+            data-te-ripple-init
+            data-te-ripple-color="light"
+          >
+            Update
+          </button>
+        </form>
       </div>
     </div>
   </body>
