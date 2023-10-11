@@ -12,6 +12,11 @@ class ProfileController{
       const userIdInt = parseInt(userId);
       
       const users = await prisma.user.findUnique({ where: { id: userIdInt,isDeleted: false } });
+      console.log(users)
+      if(users==null){
+        console.log("hello isssam")
+       res.redirect("/notFound");
+      }
       const articles= await prisma.article.findMany({where: { authorId: userIdInt  }});
       res.render('profile', { users ,articles});
       // console.log(users)

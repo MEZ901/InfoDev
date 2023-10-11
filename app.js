@@ -6,6 +6,7 @@ const authRouter = require("./src/routes/auth");
 const profileRoute= require("./src/routes/profile");
 const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articlesRoute");
+const notFound=require("./src/routes/404")
 
 dotenv.config();
 
@@ -20,9 +21,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 routes.register(app);
 profileRoute.profile(app);
+
 app.use("/auth", authRouter);
 app.use("/articles", articlesRouter);
-
+notFound.found(app);
 const PORT = process.env.SERVER_PORT || 3000;
 
 app.listen(PORT, () => {
