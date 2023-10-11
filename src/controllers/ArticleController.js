@@ -30,6 +30,7 @@ class ArticleController {
       include: {
         author: {
           select: {
+            id: true,
             photo: true,
             name: true,
             bio: true,

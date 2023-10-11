@@ -6,6 +6,7 @@ const authRouter = require("./src/routes/auth");
 const profileRoute = require("./src/routes/profile");
 const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articles");
+const methodOverride = require("method-override");
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(methodOverride("_method"));
 
 routes.register(app);
 profileRoute.profile(app);
