@@ -1,5 +1,5 @@
 const memberMiddleware = (req, res, next) => {
-  const userInfo = JSON.parse(req.cookies.userInfo);
+  const userInfo = req.cookies.userInfo;
 
   if (userInfo) return next();
 
@@ -7,7 +7,7 @@ const memberMiddleware = (req, res, next) => {
 };
 
 const guestMiddleware = (req, res, next) => {
-  const userInfo = JSON.parse(req.cookies.userInfo);
+  const userInfo = req.cookies.userInfo;
 
   if (!userInfo) return next();
 

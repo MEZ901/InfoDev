@@ -80,6 +80,9 @@
             <h1 class="text-gray-500 text-sm p-4 text-center">
               <%=users.bio%>
             </h1>
+            <% if (loggedUserId === users.id) { %>
+            <p class="mb-3 cursor-pointer" onclick="handleLogout()">Logout</p>
+            <% } %>
           </div>
         </div>
       </main>
@@ -274,11 +277,6 @@
 
     <script>
       const handleProfileClick = () => {
-        const userId = getUserId();
-        if (userId) window.location.href = `/profile?id=${userId}`;
-      };
-
-      const getUserId = () => {
         const userInfoCookie = document.cookie
           .split("; ")
           .find((cookie) => cookie.startsWith("userInfo="));
@@ -288,15 +286,18 @@
           const userInfoObject = JSON.parse(decodeURIComponent(userInfoValue));
           if (userInfoObject && userInfoObject.id) {
             const id = userInfoObject.id;
-            return id;
+            window.location.href = `/profile?id=${id}`;
           } else {
             alert('No "id" found in the userInfo cookie.');
           }
         } else {
           alert('No "userInfo" cookie found.');
         }
+      };
 
-        return null;
+      const handleLogout = () => {
+        document.cookie = `userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        window.location.href = "/";
       };
     </script>
   </body>
