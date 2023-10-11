@@ -10,10 +10,13 @@ const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articles");
 const methodOverride = require("method-override");
 const notFound = require("./src/routes/404");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
 const app = express();
+
+app.use(cookieParser());
 
 app.use(bodyParser());
 

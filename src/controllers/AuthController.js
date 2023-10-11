@@ -3,7 +3,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { hashPassword } = require("../helpers/functions");
 const bcryptjs = require("bcryptjs");
-// const localStorage = require("localStorage");
 
 const app = express();
 app.use(express.json());
@@ -52,6 +51,13 @@ class AuthController {
       const passwordMatch = await bcryptjs.compare(password, user.password);
 
       if (passwordMatch) {
+        const userInfo = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        };
+        res.cookie("userInfo", JSON.stringify(userInfo));
+
         return res.redirect("/articles");
       } else {
         return res.status(401).send("Incorrect email or password");
@@ -61,12 +67,12 @@ class AuthController {
       return res.status(500).send("Something went wrong");
     }
   };
+
   static CheckAuth = async (req, res, next) => {
-    if (req.isAuthenticated()) {
-      res.redirect("login");
+    if (req.cookies.userInfo) {
+      return res.redirect("/articles");
     }
     next();
   };
 }
-
 module.exports = AuthController;
