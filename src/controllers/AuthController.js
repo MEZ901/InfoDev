@@ -3,8 +3,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { hashPassword } = require("../helpers/functions");
 const bcryptjs = require("bcryptjs");
-const app = express();
+// const localStorage = require("localStorage");
 
+const app = express();
 app.use(express.json());
 
 class AuthController {
