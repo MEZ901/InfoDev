@@ -3,9 +3,9 @@ const articlesRouter = express.Router();
 const articleController = require("../controllers/ArticleController");
 
 articlesRouter.get("/", articleController.index);
+articlesRouter.get("/new", articleController.add);
+articlesRouter.post("/store", articleController.store);
 articlesRouter.get("/:id", articleController.show);
-articlesRouter.get("/:id/add", articleController.add);
-articlesRouter.post("", articleController.store);
 articlesRouter.get("/:id/edit", articleController.edit);
 articlesRouter.put("/:id", articleController.update);
 articlesRouter.delete("/:id", articleController.delete);
