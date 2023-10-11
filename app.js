@@ -7,6 +7,7 @@ const profileRoute = require("./src/routes/profile");
 const bodyParser = require("body-parser");
 const articlesRouter = require("./src/routes/articles");
 const methodOverride = require("method-override");
+const notFound=require("./src/routes/404");
 
 dotenv.config();
 
@@ -23,9 +24,10 @@ app.use(methodOverride("_method"));
 
 routes.register(app);
 profileRoute.profile(app);
+
 app.use("/auth", authRouter);
 app.use("/articles", articlesRouter);
-
+notFound.found(app);
 const PORT = process.env.SERVER_PORT || 3000;
 
 app.listen(PORT, () => {
