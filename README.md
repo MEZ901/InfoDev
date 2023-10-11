@@ -72,3 +72,4 @@ npm run dev
 >
 > Feel free to choose the version that best suits your development needs..
 
+> **PS 2:** We got some issues with the `Browser-Sync` package, so we recommend using the normal version of the application temporarily.
