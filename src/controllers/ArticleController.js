@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 class ArticleController {
   static index = async (req, res) => {
     const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+    const { search } = req.query;
 
     const currentUser = await prisma.user.findUnique({
       where: {
@@ -12,20 +13,54 @@ class ArticleController {
       },
     });
 
-    const articles = await prisma.article.findMany({
-      where: {
-        isDeleted: false,
-      },
-      include: {
-        author: {
-          select: {
-            name: true,
+    let articles;
+
+    if (search) {
+      articles = await prisma.article.findMany({
+        where: {
+          isDeleted: false,
+          OR: [
+            {
+              title: {
+                contains: search,
+              },
+            },
+            {
+              content: {
+                contains: search,
+              },
+            },
+          ],
+        },
+        include: {
+          author: {
+            select: {
+              name: true,
+            },
           },
         },
-      },
-    });
+      });
+    } else {
+      articles = await prisma.article.findMany({
+        where: {
+          isDeleted: false,
+        },
+        include: {
+          author: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+    }
 
-    res.render("articles/index", { title: "articles", articles, currentUser });
+    res.render("articles/index", {
+      title: "articles",
+      articles,
+      currentUser,
+      search,
+    });
   };
 
   static show = async (req, res) => {
