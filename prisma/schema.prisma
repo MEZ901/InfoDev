@@ -16,7 +16,7 @@ model User {
   bio        String?
   email      String    @unique
   password   String
-  photo      String?
+  photo      String?   @db.LongText
   created_at DateTime  @default(now())
   articles   Article[]
   comments   Comment[]

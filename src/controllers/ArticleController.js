@@ -4,6 +4,14 @@ const prisma = new PrismaClient();
 
 class ArticleController {
   static index = async (req, res) => {
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+
     const articles = await prisma.article.findMany({
       where: {
         isDeleted: false,
@@ -17,13 +25,18 @@ class ArticleController {
       },
     });
 
-    res.render("articles/index", { title: "articles", articles });
+    res.render("articles/index", { title: "articles", articles, currentUser });
   };
 
   static show = async (req, res) => {
     const { id } = req.params;
     const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
 
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
     const article = await prisma.article.findUnique({
       where: {
         id: Number(id),
@@ -51,11 +64,23 @@ class ArticleController {
       },
     });
 
-    res.render("articles/show", { title: "article", article, currentUserId });
+    res.render("articles/show", {
+      title: "article",
+      article,
+      currentUser,
+    });
   };
 
   static add = async (req, res) => {
-    res.render("articles/add", { title: "add article" });
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+
+    res.render("articles/add", { title: "add article", currentUser });
   };
 
   static store = async (req, res) => {
@@ -76,13 +101,24 @@ class ArticleController {
   static edit = async (req, res) => {
     const { id } = req.params;
 
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
     const article = await prisma.article.findUnique({
       where: {
         id: Number(id),
       },
     });
 
-    res.render("articles/edit", { title: "edit article", article });
+    res.render("articles/edit", {
+      title: "edit article",
+      article,
+      currentUser,
+    });
   };
 
   static update = async (req, res) => {

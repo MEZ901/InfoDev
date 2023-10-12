@@ -29,9 +29,12 @@ class ProfileController {
   }
   static async updateProfile(req, res) {
     try {
-      const { id, name, bio, email, password, image } = req.body;
+      const { id, name, bio, email, password } = req.body;
+
+      const imageBase64 = req?.file?.buffer.toString("base64");
 
       const idUserUpdate = parseInt(id);
+
       const data = {};
       if (name != "") {
         data.name = name;
@@ -39,8 +42,8 @@ class ProfileController {
       if (bio != "") {
         data.bio = bio;
       }
-      if (image != "") {
-        data.photo = image;
+      if (imageBase64 != undefined) {
+        data.photo = imageBase64;
       }
       if (password != "") {
         const pass = await hashPassword(password);
