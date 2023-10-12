@@ -21,6 +21,7 @@ model User {
   articles   Article[]
   comments   Comment[]
   isDeleted  Boolean   @default(false)
+  like       Like[]
 }
 
 model Article {
@@ -32,6 +33,7 @@ model Article {
   authorId   Int
   comment    Comment[]
   isDeleted  Boolean   @default(false)
+  like       Like[]
 }
 
 model Comment {
@@ -42,5 +44,17 @@ model Comment {
   articleId  Int
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
+  isDeleted  Boolean  @default(false)
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  like       Boolean
+  dislike    Boolean
+  Article    Article  @relation(fields: [articleId], references: [id])
+  articleId  Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  created_at DateTime @default(now())
   isDeleted  Boolean  @default(false)
 }
