@@ -37,28 +37,28 @@ class CommentController {
   static edit = async (req, res) => {};
 
   static updateComment = async (req, res) => {
-    const commentId = req.body.commentId;
-    const editedComment = req.body.editedComment;
+    const { commentId, comment } = req.body;
 
     try {
       if (!commentId || isNaN(commentId) || commentId <= 0) {
         return res.status(400).json({ error: "Invalid comment ID" });
       }
 
-      if (!editedComment || editedComment.trim() === "") {
+      if (!comment || comment.trim() === "") {
         return res.status(400).json({ error: "Comment cannot be empty" });
       }
 
       const updatedComment = await prisma.comment.update({
         where: { id: parseInt(commentId) },
-        data: { content: editedComment },
+        data: { content: comment },
       });
 
       if (!updatedComment) {
         return res.status(404).json({ error: "Comment not found" });
       }
 
-      res.status(200).json(updatedComment);
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error editing comment" });

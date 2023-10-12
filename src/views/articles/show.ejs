@@ -82,6 +82,7 @@
           class="m-5 p-5 rounded-lg bg-white text-center flex flex-col justify-center items-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
         >
           <% if (article.author.photo) { %>
+
           <img
             class="w-20 h-20 rounded-full"
             src="data:image/jpeg;base64,<%= article.author.photo %>"
@@ -149,7 +150,7 @@
                       <p
                         class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold"
                       >
-                        <% if (comm.user.name) { %>
+                        <% if (comm.user.photo) { %>
                         <img
                           class="mr-2 w-6 h-6 rounded-full"
                           src="data:image/jpeg;base64,<%= comm.user.photo %>"
@@ -195,24 +196,13 @@
                         aria-labelledby="dropdownMenuIconHorizontalButton"
                       >
                         <li>
-                          <form
-                            method="POST"
-                            action="/comment/edit-comment"
-                            onsubmit="return confirm('Are you sure you want to save the changes?')"
+                          <button
+                            type="button"
+                            class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
+                            onclick="handleEditCommentClick('<%=comm.id%>')"
                           >
-                            <input
-                              type="hidden"
-                              name="commentId"
-                              id="editCommentId"
-                              value="3"
-                            />
-                            <button
-                              type="submit"
-                              class="block py-2 px-4 hover:bg-gray-100"
-                            >
-                              Edit
-                            </button>
-                          </form>
+                            Edit
+                          </button>
                         </li>
                         <li>
                           <form
@@ -228,7 +218,7 @@
                             />
                             <button
                               type="submit"
-                              class="block py-2 px-4 hover:bg-gray-100"
+                              class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
                             >
                               Remove
                             </button>
@@ -238,7 +228,46 @@
                     </div>
                     <% } %>
                   </div>
-                  <p class="text-gray-500"><%= comm.content %></p>
+                  <p class="text-gray-500" id="commentContent#<%=comm.id%>">
+                    <%= comm.content %>
+                  </p>
+
+                  <!-- form in case of editing -->
+                  <form
+                    class="hidden"
+                    id="editCommentForm#<%=comm.id%>"
+                    action="/comment/edit-comment"
+                    method="POST"
+                  >
+                    <input
+                      type="hidden"
+                      name="commentId"
+                      id="commentId"
+                      value="<%= comm.id %>"
+                    />
+                    <input
+                      type="text"
+                      id="comment"
+                      name="comment"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      placeholder="Comment"
+                      value="<%= comm.content %>"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      class="inline-block mt-2 w-24 h-8 text-xs rounded bg-primary px-6 pb-2 pt-2.5 uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      onclick="handleCancelEditCommentClick('<%=comm.id%>')"
+                      class="inline-block mt-2 w-24 h-8 text-xs rounded bg-white px-6 pb-2 pt-2.5 uppercase leading-normal text-black transition duration-150 ease-in-out focus:outline-none focus:ring-0"
+                    >
+                      Cancle
+                    </button>
+                  </form>
                 </article>
                 <% }) } else { %>
                 <p>there's no comments yet</p>
@@ -268,6 +297,36 @@
           }
         } else {
           alert('No "userInfo" cookie found.');
+        }
+      };
+
+      const handleEditCommentClick = (commentId) => {
+        const commentContent = document.getElementById(
+          `commentContent#${commentId}`
+        );
+
+        const editCommentForm = document.getElementById(
+          `editCommentForm#${commentId}`
+        );
+
+        if (commentContent && editCommentForm) {
+          commentContent.classList.add("hidden");
+          editCommentForm.classList.remove("hidden");
+        }
+      };
+
+      const handleCancelEditCommentClick = (commentId) => {
+        const commentContent = document.getElementById(
+          `commentContent#${commentId}`
+        );
+
+        const editCommentForm = document.getElementById(
+          `editCommentForm#${commentId}`
+        );
+
+        if (commentContent && editCommentForm) {
+          commentContent.classList.remove("hidden");
+          editCommentForm.classList.add("hidden");
         }
       };
     </script>
