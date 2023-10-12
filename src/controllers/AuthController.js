@@ -46,7 +46,7 @@ class AuthController {
       });
 
       if (!user) {
-        return res.status(401).send("Incorrect email or password");
+        return res.redirect("/auth/login?error=Email or password is wrong");
       }
       const passwordMatch = await bcryptjs.compare(password, user.password);
 
@@ -60,19 +60,12 @@ class AuthController {
 
         return res.redirect("/articles");
       } else {
-        return res.status(401).send("Incorrect email or password");
+        return res.redirect("/auth/login?error=Email or password is wrong");
       }
     } catch (error) {
       console.error(error);
       return res.status(500).send("Something went wrong");
     }
-  };
-
-  static CheckAuth = async (req, res, next) => {
-    if (req.cookies.userInfo) {
-      return res.redirect("/articles");
-    }
-    next();
   };
 }
 module.exports = AuthController;

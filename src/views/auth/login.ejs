@@ -21,6 +21,14 @@
             >
               Login to your account
             </h1>
+            <% if (error) { %>
+            <div
+              class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700"
+              role="alert"
+            >
+              <%=error%>
+            </div>
+            <% } %>
             <form
               class="space-y-4 md:space-y-6"
               action="/auth/login"
