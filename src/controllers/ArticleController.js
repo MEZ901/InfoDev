@@ -1,17 +1,157 @@
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
+
 class ArticleController {
-  static index = async (req, res) => {};
+  static index = async (req, res) => {
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
 
-  static show = async (req, res) => {};
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
 
-  static add = async (req, res) => {};
+    const articles = await prisma.article.findMany({
+      where: {
+        isDeleted: false,
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
 
-  static store = async (req, res) => {};
+    res.render("articles/index", { title: "articles", articles, currentUser });
+  };
 
-  static edit = async (req, res) => {};
+  static show = async (req, res) => {
+    const { id } = req.params;
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
 
-  static update = async (req, res) => {};
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+    const article = await prisma.article.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            photo: true,
+            name: true,
+            bio: true,
+          },
+        },
+        comment: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                photo: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-  static delete = async (req, res) => {};
+    res.render("articles/show", {
+      title: "article",
+      article,
+      currentUser,
+    });
+  };
+
+  static add = async (req, res) => {
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+
+    res.render("articles/add", { title: "add article", currentUser });
+  };
+
+  static store = async (req, res) => {
+    const { title, content } = req.body;
+    const user_id = JSON.parse(req.cookies.userInfo).id;
+
+    const article = await prisma.article.create({
+      data: {
+        title,
+        content,
+        authorId: Number(user_id),
+      },
+    });
+
+    res.redirect("/articles");
+  };
+
+  static edit = async (req, res) => {
+    const { id } = req.params;
+
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
+
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+    const article = await prisma.article.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    res.render("articles/edit", {
+      title: "edit article",
+      article,
+      currentUser,
+    });
+  };
+
+  static update = async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const article = await prisma.article.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+
+    res.redirect(`/articles/${id}`);
+  };
+
+  static delete = async (req, res) => {
+    const { id } = req.params;
+
+    const article = await prisma.article.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    res.redirect("/articles");
+  };
 }
 
 module.exports = ArticleController;

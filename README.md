@@ -70,5 +70,6 @@ npm run dev
 >       - The normal version of the application can be accessed at `http://localhost:3000`.
 >       - In this version, changes to your EJS templates may require manual page refreshing in your web browser.
 >
-> Feel free to choose the version that best suits your development needs.
+> Feel free to choose the version that best suits your development needs..
 
+> **PS 2:** We got some issues with the `Browser-Sync` package, so we recommend using the normal version of the application temporarily.

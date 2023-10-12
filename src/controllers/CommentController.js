@@ -1,3 +1,10 @@
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+const app = express();
+
+app.use(express.json());
+
 class CommentController {
   static index = async (req, res) => {};
 
@@ -5,13 +12,82 @@ class CommentController {
 
   static add = async (req, res) => {};
 
-  static store = async (req, res) => {};
+  static creatComment = async (req, res) => {
+    const { text } = req.body;
+    const { article_id } = req.query;
+    const user_id = JSON.parse(req.cookies.userInfo).id;
+
+    try {
+      const newComment = await prisma.comment.create({
+        data: {
+          content: text,
+          articleId: Number(article_id),
+          userId: Number(user_id),
+        },
+      });
+
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error creating comment" });
+    }
+  };
 
   static edit = async (req, res) => {};
 
-  static update = async (req, res) => {};
+  static updateComment = async (req, res) => {
+    const { commentId, comment } = req.body;
 
-  static delete = async (req, res) => {};
+    try {
+      if (!commentId || isNaN(commentId) || commentId <= 0) {
+        return res.status(400).json({ error: "Invalid comment ID" });
+      }
+
+      if (!comment || comment.trim() === "") {
+        return res.status(400).json({ error: "Comment cannot be empty" });
+      }
+
+      const updatedComment = await prisma.comment.update({
+        where: { id: parseInt(commentId) },
+        data: { content: comment },
+      });
+
+      if (!updatedComment) {
+        return res.status(404).json({ error: "Comment not found" });
+      }
+
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error editing comment" });
+    }
+  };
+
+  static deleteComment = async (req, res) => {
+    const commentId = req.body.commentId;
+
+    if (!commentId || isNaN(commentId) || commentId <= 0) {
+      return res.status(400).json({ error: "Invalid comment ID" });
+    }
+
+    try {
+      const deletedComment = await prisma.comment.delete({
+        where: { id: parseInt(commentId) },
+      });
+
+      if (!deletedComment) {
+        return res.status(404).json({ error: "Comment not found" });
+      }
+
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error deleting comment" });
+    }
+  };
 }
 
 module.exports = CommentController;

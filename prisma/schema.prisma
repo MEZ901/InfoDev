@@ -16,16 +16,17 @@ model User {
   bio        String?
   email      String    @unique
   password   String
-  photo      String
+  photo      String?   @db.LongText
   created_at DateTime  @default(now())
   articles   Article[]
+  comments   Comment[]
   isDeleted  Boolean   @default(false)
 }
 
 model Article {
   id         Int       @id @default(autoincrement())
   title      String
-  contenu    String
+  content    String    @db.Text
   created_at DateTime  @default(now())
   author     User      @relation(fields: [authorId], references: [id])
   authorId   Int
@@ -35,9 +36,11 @@ model Article {
 
 model Comment {
   id         Int      @id @default(autoincrement())
-  contant    String
+  content    String
   created_at DateTime @default(now())
   Article    Article  @relation(fields: [articleId], references: [id])
   articleId  Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
   isDeleted  Boolean  @default(false)
 }

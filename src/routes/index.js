@@ -1,7 +1,9 @@
-const IndexController = require("../controllers/IndexController");
+const { guestMiddleware } = require("../middlewares/authMiddleware");
 
-const register = (app) => {
-  app.get("/", IndexController.index);
+const index = (app) => {
+  app.get("/", guestMiddleware, (req, res) => {
+    res.render("index", { title: "InfoDev" });
+  });
 };
 
-module.exports = { register };
+module.exports = { index };
