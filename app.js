@@ -27,7 +27,7 @@ const app = express();
 
 // Middleware setup
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // View engine and static files configuration
 app.set("view engine", "ejs");
