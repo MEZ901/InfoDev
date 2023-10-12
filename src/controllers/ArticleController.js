@@ -86,6 +86,11 @@ class ArticleController {
   static store = async (req, res) => {
     const { title, content } = req.body;
     const user_id = JSON.parse(req.cookies.userInfo).id;
+    const sqlRegex = /[\;"]/g;
+
+    if (sqlRegex.test(title) || sqlRegex.test(content)) {
+      return res.status(400).send("Invalid input. Avoid special characters.");
+    }
 
     const article = await prisma.article.create({
       data: {
@@ -124,6 +129,11 @@ class ArticleController {
   static update = async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
+    const sqlRegex = /[\;"]/g;
+
+    if (sqlRegex.test(title) || sqlRegex.test(content)) {
+      return res.status(400).send("Invalid input. Avoid special characters.");
+    }
 
     const article = await prisma.article.update({
       where: {
