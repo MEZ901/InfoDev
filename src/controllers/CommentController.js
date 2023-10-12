@@ -81,7 +81,8 @@ class CommentController {
         return res.status(404).json({ error: "Comment not found" });
       }
 
-      res.status(204).send();
+      const referer = req.headers.referer || "/";
+      res.redirect(referer);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error deleting comment" });
