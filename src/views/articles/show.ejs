@@ -78,7 +78,7 @@
       </div>
 
       <div class="w-1/4 border-gray-700 border-l min-h-full px-5">
-        <div
+        <section
           class="m-5 p-5 rounded-lg bg-white text-center flex flex-col justify-center items-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
         >
           <% if (article.author.photo) { %>
@@ -106,177 +106,239 @@
           >
             View Profile
           </button>
-        </div>
+        </section>
 
-        <div>
-          <section class="antialiased">
-            <div class="max-w-2xl mx-auto px-4">
-              <h1 class="text-center font-bold text-3xl mb-6">
-                Comments (<%= article.comment.length %>)
-              </h1>
+        <section>
+          <div
+            class="m-5 p-5 rounded-lg bg-white text-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
+          >
+            <div class="flex justify-around">
               <form
-                class="mb-6"
-                action="/comment/creat-comment?article_id=<%=article.id%>"
-                method="POST"
+                action="<%= article.like.some(row => row.like === true && row.user.id === currentUser.id) ? '/like/unlike' : '/like/like' %>"
+                method="post"
               >
-                <div
-                  class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
-                >
-                  <label for="comment" class="sr-only">Your comment</label>
-                  <textarea
-                    id="comment"
-                    rows="3"
-                    name="text"
-                    class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
-                    placeholder="Write a comment..."
-                    required
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                >
-                  Post Comment
+                <input
+                  type="hidden"
+                  name="article_id"
+                  value="<%= article.id %>"
+                />
+                <button class="flex items-center" type="submit">
+                  <div class="flex flex-col items-center mx-2 w-6 h-6">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      id="like"
+                      fill="<%= article.like.some(row => row.like === true && row.user.id === currentUser.id) ? 'blue' : 'black' %>"
+                    >
+                      <path
+                        d="M21.3,10.08A3,3,0,0,0,19,9H14.44L15,7.57A4.13,4.13,0,0,0,11.11,2a1,1,0,0,0-.91.59L7.35,9H5a3,3,0,0,0-3,3v7a3,3,0,0,0,3,3H17.73a3,3,0,0,0,2.95-2.46l1.27-7A3,3,0,0,0,21.3,10.08ZM7,20H5a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1H7Zm13-7.82-1.27,7a1,1,0,0,1-1,.82H9V10.21l2.72-6.12A2.11,2.11,0,0,1,13.1,6.87L12.57,8.3A2,2,0,0,0,14.44,11H19a1,1,0,0,1,.77.36A1,1,0,0,1,20,12.18Z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span
+                    ><%= article.like.filter(row => row.like === true).length
+                    %></span
+                  >
                 </button>
               </form>
-              <div class="flex flex-col gap-5">
-                <% if(article.comment.length) { article.comment.map((comm) => {
-                %>
-                <article
-                  class="p-6 text-base bg-white rounded-lg shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
-                >
-                  <div class="flex justify-between items-center mb-2">
-                    <div class="flex items-center">
-                      <p
-                        class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold"
-                      >
-                        <% if (comm.user.photo) { %>
-                        <img
-                          class="mr-2 w-6 h-6 rounded-full"
-                          src="data:image/jpeg;base64,<%= comm.user.photo %>"
-                          alt="Michael Gough"
-                        />
-                        <% } else { %>
-                        <img
-                          class="mr-2 w-6 h-6 rounded-full"
-                          src="data:image/jpeg;base64,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"
-                          alt="Michael Gough"
-                        />
-                        <% } %> <%= comm.user.name %>
-                      </p>
-                    </div>
-                    <% if(comm.user.id == currentUser.id) { %>
-                    <button
-                      id="dropdownComment1Button"
-                      data-dropdown-toggle="dropdownComment1"
-                      class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
-                      type="button"
-                    >
-                      <svg
-                        class="w-4 h-4"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 16 3"
-                      >
-                        <path
-                          d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-                        />
-                      </svg>
-                      <span class="sr-only">Comment settings</span>
-                    </button>
-
-                    <!-- Dropdown menu -->
-                    <div
-                      id="dropdownComment1"
-                      class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow"
-                    >
-                      <ul
-                        class="py-1 text-sm text-gray-700"
-                        aria-labelledby="dropdownMenuIconHorizontalButton"
-                      >
-                        <li>
-                          <button
-                            type="button"
-                            class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
-                            onclick="handleEditCommentClick('<%=comm.id%>')"
-                          >
-                            Edit
-                          </button>
-                        </li>
-                        <li>
-                          <form
-                            method="POST"
-                            action="/comment/delete-comment"
-                            onsubmit="return confirm('Are you sure you want to delete this comment?')"
-                          >
-                            <input
-                              type="hidden"
-                              name="commentId"
-                              id="commentId"
-                              value="<%= comm.id %>"
-                            />
-                            <button
-                              type="submit"
-                              class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
-                            >
-                              Remove
-                            </button>
-                          </form>
-                        </li>
-                      </ul>
-                    </div>
-                    <% } %>
-                  </div>
-                  <p class="text-gray-500" id="commentContent#<%=comm.id%>">
-                    <%= comm.content %>
-                  </p>
-
-                  <!-- form in case of editing -->
-                  <form
-                    class="hidden"
-                    id="editCommentForm#<%=comm.id%>"
-                    action="/comment/edit-comment"
-                    method="POST"
+              <form
+                action="<%= article.like.some(row => row.dislike === true && row.user.id === currentUser.id) ? '/like/unlike' : '/like/dislike' %>"
+                method="post"
+              >
+                <input
+                  type="hidden"
+                  name="article_id"
+                  value="<%= article.id %>"
+                />
+                <button type="submit" class="flex items-center">
+                  <span
+                    ><%= article.like.filter(row => row.dislike === true).length
+                    %></span
                   >
-                    <input
-                      type="hidden"
-                      name="commentId"
-                      id="commentId"
-                      value="<%= comm.id %>"
-                    />
-                    <input
-                      type="text"
-                      id="comment"
-                      name="comment"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Comment"
-                      value="<%= comm.content %>"
-                      required
-                    />
-                    <button
-                      type="submit"
-                      class="inline-block mt-2 w-24 h-8 text-xs rounded bg-primary px-6 pb-2 pt-2.5 uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                  <div class="flex flex-col items-center mx-2 w-6 h-6">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      id="dislike"
+                      fill="<%= article.like.some(row => row.dislike === true && row.user.id === currentUser.id) ? 'blue' : 'black' %>"
                     >
-                      Update
-                    </button>
-                    <button
-                      type="button"
-                      onclick="handleCancelEditCommentClick('<%=comm.id%>')"
-                      class="inline-block mt-2 w-24 h-8 text-xs rounded bg-white px-6 pb-2 pt-2.5 uppercase leading-normal text-black transition duration-150 ease-in-out focus:outline-none focus:ring-0"
-                    >
-                      Cancle
-                    </button>
-                  </form>
-                </article>
-                <% }) } else { %>
-                <p>there's no comments yet</p>
-                <% } %>
-              </div>
+                      <path
+                        d="M19,2H6.27A3,3,0,0,0,3.32,4.46l-1.27,7A3,3,0,0,0,5,15H9.56L9,16.43A4.13,4.13,0,0,0,12.89,22a1,1,0,0,0,.91-.59L16.65,15H19a3,3,0,0,0,3-3V5A3,3,0,0,0,19,2ZM15,13.79l-2.72,6.12a2.13,2.13,0,0,1-1.38-2.78l.53-1.43A2,2,0,0,0,9.56,13H5a1,1,0,0,1-.77-.36A1,1,0,0,1,4,11.82l1.27-7a1,1,0,0,1,1-.82H15ZM20,12a1,1,0,0,1-1,1H17V4h2a1,1,0,0,1,1,1Z"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </form>
             </div>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
-          </section>
-        </div>
+          </div>
+        </section>
+
+        <section class="antialiased">
+          <div class="max-w-2xl mx-auto px-4">
+            <h1 class="text-center font-bold text-3xl mb-6">
+              Comments (<%= article.comment.length %>)
+            </h1>
+            <form
+              class="mb-6"
+              action="/comment/creat-comment?article_id=<%=article.id%>"
+              method="POST"
+            >
+              <div
+                class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
+              >
+                <label for="comment" class="sr-only">Your comment</label>
+                <textarea
+                  id="comment"
+                  rows="3"
+                  name="text"
+                  class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
+                  placeholder="Write a comment..."
+                  required
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+              >
+                Post Comment
+              </button>
+            </form>
+            <div class="flex flex-col gap-5">
+              <% if(article.comment.length) { article.comment.map((comm) => { %>
+              <article
+                class="p-6 text-base bg-white rounded-lg shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center">
+                    <p
+                      class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold"
+                    >
+                      <% if (comm.user.photo) { %>
+                      <img
+                        class="mr-2 w-6 h-6 rounded-full"
+                        src="data:image/jpeg;base64,<%= comm.user.photo %>"
+                        alt="Michael Gough"
+                      />
+                      <% } else { %>
+                      <img
+                        class="mr-2 w-6 h-6 rounded-full"
+                        src="data:image/jpeg;base64,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"
+                        alt="Michael Gough"
+                      />
+                      <% } %> <%= comm.user.name %>
+                    </p>
+                  </div>
+                  <% if(comm.user.id == currentUser.id) { %>
+                  <button
+                    id="dropdownComment1Button"
+                    data-dropdown-toggle="dropdownComment1"
+                    class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 16 3"
+                    >
+                      <path
+                        d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
+                      />
+                    </svg>
+                    <span class="sr-only">Comment settings</span>
+                  </button>
+
+                  <!-- Dropdown menu -->
+                  <div
+                    id="dropdownComment1"
+                    class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow"
+                  >
+                    <ul
+                      class="py-1 text-sm text-gray-700"
+                      aria-labelledby="dropdownMenuIconHorizontalButton"
+                    >
+                      <li>
+                        <button
+                          type="button"
+                          class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
+                          onclick="handleEditCommentClick('<%=comm.id%>')"
+                        >
+                          Edit
+                        </button>
+                      </li>
+                      <li>
+                        <form
+                          method="POST"
+                          action="/comment/delete-comment"
+                          onsubmit="return confirm('Are you sure you want to delete this comment?')"
+                        >
+                          <input
+                            type="hidden"
+                            name="commentId"
+                            id="commentId"
+                            value="<%= comm.id %>"
+                          />
+                          <button
+                            type="submit"
+                            class="block py-2 px-4 hover:bg-gray-100 w-full text-start"
+                          >
+                            Remove
+                          </button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+                  <% } %>
+                </div>
+                <p class="text-gray-500" id="commentContent#<%=comm.id%>">
+                  <%= comm.content %>
+                </p>
+
+                <!-- form in case of editing -->
+                <form
+                  class="hidden"
+                  id="editCommentForm#<%=comm.id%>"
+                  action="/comment/edit-comment"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="commentId"
+                    id="commentId"
+                    value="<%= comm.id %>"
+                  />
+                  <input
+                    type="text"
+                    id="comment"
+                    name="comment"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder="Comment"
+                    value="<%= comm.content %>"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    class="inline-block mt-2 w-24 h-8 text-xs rounded bg-primary px-6 pb-2 pt-2.5 uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    onclick="handleCancelEditCommentClick('<%=comm.id%>')"
+                    class="inline-block mt-2 w-24 h-8 text-xs rounded bg-white px-6 pb-2 pt-2.5 uppercase leading-normal text-black transition duration-150 ease-in-out focus:outline-none focus:ring-0"
+                  >
+                    Cancle
+                  </button>
+                </form>
+              </article>
+              <% }) } else { %>
+              <p>there's no comments yet</p>
+              <% } %>
+            </div>
+          </div>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+        </section>
       </div>
     </div>
 

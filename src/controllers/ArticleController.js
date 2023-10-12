@@ -96,6 +96,20 @@ class ArticleController {
             },
           },
         },
+        like: {
+          where: {
+            isDeleted: false,
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                photo: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
