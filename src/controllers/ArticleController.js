@@ -22,6 +22,7 @@ class ArticleController {
 
   static show = async (req, res) => {
     const { id } = req.params;
+    const currentUserId = Number(JSON.parse(req.cookies.userInfo).id);
 
     const article = await prisma.article.findUnique({
       where: {
@@ -40,6 +41,7 @@ class ArticleController {
           include: {
             user: {
               select: {
+                id: true,
                 photo: true,
                 name: true,
               },
@@ -49,7 +51,7 @@ class ArticleController {
       },
     });
 
-    res.render("articles/show", { title: "article", article });
+    res.render("articles/show", { title: "article", article, currentUserId });
   };
 
   static add = async (req, res) => {

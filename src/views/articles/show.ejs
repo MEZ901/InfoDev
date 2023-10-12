@@ -94,7 +94,9 @@
         <div>
           <section class="antialiased">
             <div class="max-w-2xl mx-auto px-4">
-              <h1 class="text-center font-bold text-3xl mb-6">Comments</h1>
+              <h1 class="text-center font-bold text-3xl mb-6">
+                Comments (<%= article.comment.length %>)
+              </h1>
               <form
                 class="mb-6"
                 action="/comment/creat-comment?article_id=<%=article.id%>"
@@ -139,6 +141,7 @@
                         <%= comm.user.name %>
                       </p>
                     </div>
+                    <% if(comm.user.id == currentUserId) { %>
                     <button
                       id="dropdownComment1Button"
                       data-dropdown-toggle="dropdownComment1"
@@ -158,6 +161,7 @@
                       </svg>
                       <span class="sr-only">Comment settings</span>
                     </button>
+
                     <!-- Dropdown menu -->
                     <div
                       id="dropdownComment1"
@@ -197,7 +201,7 @@
                               type="hidden"
                               name="commentId"
                               id="commentId"
-                              value="2"
+                              value="<%= comm.id %>"
                             />
                             <button
                               type="submit"
@@ -209,6 +213,7 @@
                         </li>
                       </ul>
                     </div>
+                    <% } %>
                   </div>
                   <p class="text-gray-500"><%= comm.content %></p>
                 </article>
