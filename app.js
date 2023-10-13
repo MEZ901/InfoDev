@@ -19,6 +19,7 @@ const commentRouter = require("./src/routes/comment");
 const profileRoute = require("./src/routes/profile");
 const articlesRouter = require("./src/routes/articles");
 const notFound = require("./src/routes/404");
+const likeRouter = require("./src/routes/like");
 
 // Load environment variables from a .env file
 dotenv.config();
@@ -43,6 +44,7 @@ profileRoute.profile(app);
 app.use("/auth", guestMiddleware, authRouter);
 app.use("/comment", memberMiddleware, commentRouter);
 app.use("/articles", memberMiddleware, articlesRouter);
+app.use("/like", memberMiddleware, likeRouter);
 notFound.found(app);
 
 const PORT = process.env.SERVER_PORT || 3000;

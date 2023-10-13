@@ -51,7 +51,11 @@
       <div
         class="block w-1/2 mt-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
       >
-        <form action="/articles/store" method="POST">
+        <form
+          action="/articles/store"
+          method="POST"
+          onsubmit="handleFormSubmit(event)"
+        >
           <!--Title input-->
           <div class="mb-6">
             <label
@@ -116,6 +120,23 @@
           }
         } else {
           alert('No "userInfo" cookie found.');
+        }
+      };
+
+      const handleFormSubmit = (event) => {
+        const titleInput = document.getElementById("title");
+        const contentInput = document.getElementById("content");
+
+        const sqlRegex = /[\';"]/g;
+
+        if (
+          sqlRegex.test(titleInput.value) ||
+          sqlRegex.test(contentInput.value)
+        ) {
+          event.preventDefault();
+          alert(
+            "Please enter a valid title and content without special characters."
+          );
         }
       };
     </script>

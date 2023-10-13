@@ -3,7 +3,8 @@ const AuthController = require("../controllers/AuthController");
 const authRouter = express.Router();
 
 authRouter.get("/login", (req, res) => {
-  res.render("auth/login", { title: "Login Page" });
+  const { error } = req.query;
+  res.render("auth/login", { title: "Login Page", error });
 });
 
 authRouter.get("/register", (req, res) => {
